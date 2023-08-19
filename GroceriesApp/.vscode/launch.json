@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run npm start",
+            "type": "npm",
+            "request": "launch",
+            "command": "start",
+            "path": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch Chrome against localhost",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:8081", // Note: Change the port if your Metro server is running on a different port
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
