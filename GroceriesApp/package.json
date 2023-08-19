@@ -3,36 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    // Start the development server for Android
     "android": "react-native run-android",
-    
-    // Start the development server for iOS
     "ios": "react-native run-ios",
-    
-    // Run ESLint to check code for linting issues
     "lint": "eslint .",
-    
-    // Start the React Native development server
     "start": "react-native start",
-    
-    // Run Jest for testing
-    "test": "jest",
-    
-    // The following build and install scripts are not required for React Native on Heroku
-    // They are provided here for clarity, but you can leave them as they are
-    // or remove them if you prefer
-    "build": "echo 'Build step is not required'",
-    "install": "npm install"
+    "test": "jest"
   },
   "dependencies": {
-    //dependencies
-    "axios": "^1.4.0",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.3",
     "react": "18.2.0",
     "react-native": "^0.72.3",
     "react-native-share": "^9.2.3"
   },
   "devDependencies": {
-    //dev dependencies
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
@@ -50,13 +34,6 @@
     "typescript": "4.8.4"
   },
   "engines": {
-    // Specify compatible Node.js version range
-    "node": ">=16 <=20"
-  },
-  "buildpacks": [
-    // Specify the Heroku buildpack to use
-    {
-      "url": "heroku/nodejs"
-    }
-  ]
+    "node": ">=16"
+  }
 }

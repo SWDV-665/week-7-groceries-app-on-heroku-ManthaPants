@@ -1,117 +1,99 @@
-import React, { useState, useEffect } from 'react';
+// Import necessary modules from React, React Native, and react-native-share
+import React, { useState } from 'react';
+import Share from 'react-native-share';
 import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
-import * as Font from 'C:\Users\Samantha\Documents\GitHub\week-6-groceries-app-restful-services-ManthaPants\GroceriesApp\assets\fonts\NanumPenScript-Regular.ttf';
-import Share from 'react-native-share'; // Import the react-native-share package
-
 
 const App = () => {
+  // Define state variables for the grocery item and the list of grocery items
   const [item, setItem] = useState('');
   const [groceryList, setGroceryList] = useState([]);
-  
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      'NanumPenScript-Regular': require('GroceriesApp\assets\fonts\NanumPenScript-Regular.ttf'),
-    });
-  };
-  
-  useEffect(() => {
-    loadFonts();
-  }, []);
-  
 
+  // Function to add a new item to the grocery list
   const handleAddItem = () => {
-    if (item.trim() === '') {
-      return;
+    // Check if the item is not an empty string
+    if (item.trim() !== '') {
+      // Add the new item to the grocery list with a unique key based on the current timestamp
+      setGroceryList([...groceryList, { key: String(Date.now()), name: item }]);
+      // Clear the item input field
+      setItem('');
     }
+  };
 
-    const newItem = {
-      key: Date.now().toString(),
-      name: item,
+  // Function to remove an item from the grocery list by its key
+  const handleRemoveItem = (itemId) => {
+    setGroceryList(groceryList.filter((item) => item.key !== itemId));
+  };
+
+  // Function to share the grocery list
+  const onShare = async () => {
+    const shareOptions = {
+      title: 'Share Grocery List',
+      message: 'Check out my grocery list!',
+      url: 'https://www.mysimplegrocerylist.com',
     };
 
-    setGroceryList([...groceryList, newItem]);
-    setItem('');
-  };
-
-  const handleRemoveItem = (key) => {
-    const updatedList = groceryList.filter(item => item.key !== key);
-    setGroceryList(updatedList);
-  };
-
-  const onShare = async () => {
     try {
-      const shareOptions = {
-        title: 'Grocery List',
-        message: groceryList.map(item => item.name).join('\n'),
-      };
-
-      await Share.open(shareOptions);
+      await Share.open(shareOptions); // Open the share dialog
     } catch (error) {
-      console.error('Error sharing the list:', error.message);
+      console.log('Error =>', error); // Log any errors
     }
   };
 
+  // Render the app's UI
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Grocery List</Text>
-      <View style={styles.groceryListContainer}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter an item..."
-            value={item}
-            onChangeText={(text) => setItem(text)}
-          />
-          <Button title="Add" onPress={handleAddItem} />
-        </View>
-        <FlatList
-          data={groceryList}
-          renderItem={({ item }) => (
-            <View style={styles.listItem}>
-              <Text>{item.name}</Text>
-              <Button title="Remove" onPress={() => handleRemoveItem(item.key)} />
-            </View>
-          )}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter an item..."
+          value={item}
+          onChangeText={(text) => setItem(text)} // Update the item state when the input changes
         />
-        <Button title="Share List" onPress={onShare} />
+        <Button title="Add" onPress={handleAddItem} />
       </View>
+      <FlatList
+        data={groceryList}
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            <Text>{item.name}</Text>
+            <Button title="Remove" onPress={() => handleRemoveItem(item.key)} />
+          </View>
+        )}
+      />
+      <Button title="Share List" onPress={onShare} />
     </View>
   );
 };
 
+// Define the styles for the app's UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#c9d7c0',
+    backgroundColor: '#fff',
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  groceryListContainer: {
-    flex: 1,
+    marginBottom: 20,
   },
   inputContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: 'gray',
     marginRight: 10,
-    padding: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
   },
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
 });
 
